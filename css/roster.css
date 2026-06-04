@@ -1,0 +1,248 @@
+/* =========================================================
+   RYANGGANGCHAOS — VALORANT ROSTER page
+   (loads after style.css; reuses :root variables)
+   ========================================================= */
+
+/* active nav link */
+.nav a.is-active { color: var(--cream); }
+.nav a.is-active::after { right: 0; }
+
+/* =========================================================
+   ROSTER HERO
+   ========================================================= */
+.rhero {
+  position: relative;
+  padding: calc(var(--header-h) + 7vh) var(--gutter) clamp(50px, 8vh, 90px);
+  overflow: hidden;
+  border-bottom: 1px solid var(--line);
+}
+.rhero__bg {
+  position: absolute; inset: 0; z-index: -2;
+  background:
+    radial-gradient(120% 90% at 85% -10%, rgba(190,22,22,.28), transparent 55%),
+    linear-gradient(180deg, #160c0b, var(--bg));
+}
+.rhero__bg::after {
+  content: ""; position: absolute; inset: 0;
+  background-image: repeating-linear-gradient(180deg, rgba(255,255,255,.022) 0 1px, transparent 1px 5px);
+  mix-blend-mode: overlay;
+}
+.rhero__glow {
+  position: absolute; top: -20%; right: -5%;
+  width: min(50vw, 560px); aspect-ratio: 1;
+  background: radial-gradient(circle, var(--red-glow), transparent 62%);
+  filter: blur(20px); animation: pulse 6s ease-in-out infinite;
+  z-index: -1;
+}
+.rhero__watermark {
+  position: absolute; right: 3%; top: 50%; transform: translateY(-50%);
+  font-weight: 900; font-size: clamp(140px, 30vw, 420px);
+  color: rgba(255,255,255,.025); line-height: .8; pointer-events: none;
+  z-index: -1;
+}
+.rhero__inner { position: relative; max-width: var(--maxw); margin-inline: auto; }
+
+.rhero__back {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-head); font-weight: 600;
+  letter-spacing: .18em; font-size: 12px; color: var(--muted);
+  transition: color .25s ease, gap .25s ease;
+}
+.rhero__back:hover { color: var(--red); gap: 12px; }
+.rhero__back span { font-size: 18px; }
+
+.rhero__icon { width: 50px; height: 50px; color: var(--red); margin: 26px 0 18px; }
+.rhero__icon svg { width: 100%; height: 100%; filter: drop-shadow(0 0 16px rgba(190,20,20,.5)); }
+
+.rhero__label {
+  font-family: var(--font-head); font-weight: 600;
+  letter-spacing: .3em; font-size: 13px; color: var(--red);
+}
+.rhero__title {
+  font-family: var(--font-display); font-weight: 400;
+  font-size: clamp(48px, 11vw, 132px); line-height: .9;
+  color: var(--cream); margin-top: 8px; letter-spacing: .01em;
+}
+.rhero__title span { display: block; }
+.rhero__title em { display: block; color: var(--red); font-style: normal; }
+.rhero__jp { margin-top: 18px; color: var(--muted); font-weight: 500; letter-spacing: .04em; }
+
+.rhero__coords {
+  position: absolute; right: var(--gutter); bottom: clamp(50px,8vh,90px);
+  font-family: var(--font-mono); font-size: 12px; color: var(--muted-2); letter-spacing: .08em;
+}
+
+/* =========================================================
+   ROSTER SECTION
+   ========================================================= */
+.roster {
+  max-width: var(--maxw); margin-inline: auto;
+  padding: clamp(60px, 10vh, 110px) var(--gutter);
+}
+.roster__head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 16px; margin-bottom: clamp(34px, 5vh, 56px);
+  border-bottom: 1px solid var(--line); padding-bottom: 18px;
+}
+.roster .section-head {
+  text-align: left; margin-inline: 0; padding-bottom: 0;
+}
+.roster .section-head::after { display: none; }
+.roster__count {
+  font-family: var(--font-mono); font-size: 13px;
+  letter-spacing: .12em; color: var(--red);
+}
+
+.roster-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: clamp(16px, 2.2vw, 26px);
+}
+.roster-grid--staff { grid-template-columns: repeat(2, 1fr); max-width: 760px; }
+
+/* =========================================================
+   PLAYER CARD
+   ========================================================= */
+.pcard {
+  --accent: var(--red);
+  position: relative;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  overflow: hidden;
+  transition: transform .4s cubic-bezier(.2,.7,.2,1), border-color .4s ease, box-shadow .4s ease;
+}
+.pcard:hover {
+  transform: translateY(-8px);
+  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+  box-shadow: 0 20px 50px -20px color-mix(in srgb, var(--accent) 60%, transparent);
+}
+
+/* role accent colors (kept within the red-forward brand) */
+.pcard[data-role="duelist"]    { --accent: #e0241c; }
+.pcard[data-role="initiator"]  { --accent: #e06a1c; }
+.pcard[data-role="controller"] { --accent: #b51d2a; }
+.pcard[data-role="sentinel"]   { --accent: #c23b6a; }
+.pcard[data-role="flex"]       { --accent: #c9412a; }
+.pcard[data-role="coach"]      { --accent: #d8b24a; }
+.pcard[data-role="sub"]        { --accent: #7a6f64; }
+
+/* media / photo placeholder */
+.pcard__media {
+  position: relative; height: 260px; overflow: hidden;
+  background:
+    radial-gradient(85% 95% at 50% 8%, color-mix(in srgb, var(--accent) 42%, transparent), transparent 64%),
+    linear-gradient(180deg, #1b1110, #0c0707);
+  display: grid; place-items: center;
+}
+.pcard__media::before { /* scanlines */
+  content: ""; position: absolute; inset: 0;
+  background-image: repeating-linear-gradient(180deg, rgba(255,255,255,.03) 0 1px, transparent 1px 4px);
+  mix-blend-mode: overlay;
+}
+.pcard__media::after { /* bottom blend */
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 90px;
+  background: linear-gradient(180deg, transparent, var(--panel));
+}
+/* Swap this for a real photo:  style="background-image:url('assets/players/xxx.png')" + add .has-photo */
+.pcard__ghost {
+  font-family: var(--font-display); font-weight: 400;
+  font-size: clamp(40px, 7vw, 76px); line-height: 1;
+  color: color-mix(in srgb, var(--accent) 32%, transparent);
+  text-shadow: 0 0 40px color-mix(in srgb, var(--accent) 40%, transparent);
+  letter-spacing: .02em; user-select: none;
+  transition: transform .5s cubic-bezier(.2,.7,.2,1);
+}
+.pcard:hover .pcard__ghost { transform: scale(1.06); }
+.pcard__no {
+  position: absolute; top: 14px; left: 16px; z-index: 2;
+  font-family: var(--font-display); font-size: 22px;
+  color: var(--cream); opacity: .85;
+  -webkit-text-stroke: 0; letter-spacing: .02em;
+}
+.pcard__no::before { content: "#"; color: var(--accent); }
+.pcard[data-role="coach"] .pcard__no::before,
+.pcard[data-role="sub"] .pcard__no::before { content: ""; }
+
+/* body */
+.pcard__body { position: relative; padding: clamp(18px,2vw,24px) clamp(18px,2vw,24px) clamp(22px,2.4vw,28px); margin-top: -46px; z-index: 3; }
+.pcard__role {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-head); font-weight: 700;
+  letter-spacing: .16em; font-size: 11px;
+  color: var(--cream);
+  background: color-mix(in srgb, var(--accent) 85%, #000);
+  padding: 4px 12px; border-radius: 2px;
+  box-shadow: 0 6px 18px -6px var(--accent);
+}
+.pcard__igl-tag {
+  font-size: 9px; letter-spacing: .12em;
+  background: rgba(0,0,0,.35); padding: 1px 5px; border-radius: 2px;
+}
+.pcard__ign {
+  font-family: var(--font-display); font-weight: 400;
+  font-size: clamp(30px, 4vw, 44px); line-height: 1;
+  color: var(--cream); margin-top: 12px; letter-spacing: .01em;
+}
+.pcard__name {
+  margin-top: 8px; color: var(--cream-dim); font-size: 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.pcard__flag {
+  font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: .1em; color: var(--muted);
+  border: 1px solid var(--line); padding: 1px 6px; border-radius: 2px;
+}
+.pcard__agents {
+  margin-top: 14px; padding-top: 14px;
+  border-top: 1px solid var(--line);
+  color: var(--muted); font-size: 13px; letter-spacing: .02em;
+}
+.pcard__social {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-top: 16px;
+  font-family: var(--font-head); font-weight: 600;
+  letter-spacing: .08em; font-size: 13px; color: var(--muted);
+  transition: color .25s ease, gap .25s ease;
+}
+.pcard__social svg { width: 15px; height: 15px; }
+.pcard__social:hover { color: var(--accent); gap: 12px; }
+.pcard__social--cta { color: var(--accent); }
+
+/* staff variants */
+.pcard--sub .pcard__media { background:
+  repeating-linear-gradient(45deg, #120c0b 0 12px, #160f0e 12px 24px); }
+.pcard--sub .pcard__ghost { font-size: 80px; color: var(--muted-2); }
+
+/* =========================================================
+   CTA
+   ========================================================= */
+.rcta {
+  position: relative;
+  padding: clamp(70px, 12vh, 140px) var(--gutter);
+  border-top: 1px solid var(--line);
+  background:
+    radial-gradient(80% 120% at 50% 0%, rgba(150,20,20,.12), transparent 60%),
+    var(--bg-2);
+  text-align: center;
+}
+.rcta__inner { max-width: 720px; margin-inline: auto; }
+.rcta__title {
+  font-family: var(--font-display); font-weight: 400;
+  font-size: clamp(34px, 6.5vw, 72px); line-height: .96;
+  color: var(--cream); letter-spacing: .01em;
+}
+.rcta__title em { color: var(--red); font-style: normal; }
+.rcta__text { margin-top: 20px; color: var(--muted); font-size: 15px; line-height: 1.9; }
+.rcta__btns { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; margin-top: 34px; }
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width: 880px) {
+  .roster-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
+  .roster-grid, .roster-grid--staff { grid-template-columns: 1fr; max-width: 420px; margin-inline: auto; }
+  .roster__head { flex-direction: row; }
+  .rhero__coords { display: none; }
+  .rcta__btns .btn { flex: 1 1 auto; justify-content: center; }
+}
